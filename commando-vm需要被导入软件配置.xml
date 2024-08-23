@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <envs>
+    <env name="MIN_DISK_SPACE" value="70" />
+    <env name="VM_COMMON_DIR" value="%ProgramData%\_VM" />
+    <env name="TOOL_LIST_DIR" value="%ProgramData%\Microsoft\Windows\Start Menu\Programs\Tools" />
+    <env name="TOOL_LIST_SHORTCUT" value="%UserProfile%\Desktop\Tools.lnk" />
+    <env name="RAW_TOOLS_DIR" value="%SystemDrive%\Tools" />
+  </envs>
+  <packages>
+    <package name="x64dbg.vm" />
+    <package name="x64dbg.dbgchild.vm" />
+    <package name="x64dbg.ollydumpex.vm" />
+    <package name="x64dbg.plugin.dbgchild.vm" />
+    <package name="x64dbg.plugin.ollydumpex.vm" />
+    <package name="x64dbg.plugin.scyllahide.vm" />
+    <package name="x64dbg.plugin.x64dbgpy.vm" />
+    <package name="x64dbg.scyllahide.vm" />
+    <package name="x64dbgpy.vm" />
+    <package name="ollydbg.ollydumpex.vm" />
+    <package name="ollydbg.plugin.ollydumpex.vm" />
+    <package name="ollydbg.plugin.scyllahide.vm" />
+    <package name="ollydbg.scyllahide.vm" />
+    <package name="ollydbg.vm" />
+    <package name="ollydbg2.ollydumpex.vm" />
+    <package name="ollydbg2.plugin.ollydumpex.vm" />
+    <package name="ollydbg2.plugin.scyllahide.vm" />
+    <package name="ollydbg2.scyllahide.vm" />
+    <package name="ollydbg2.vm" />
+    <package name="ida.diaphora.vm" />
+    <package name="ida.plugin.capa.vm" />
+    <package name="ida.plugin.comida.vm" />
+    <package name="ida.plugin.dereferencing.vm" />
+    <package name="ida.plugin.diaphora.vm" />
+    <package name="ida.plugin.flare.vm" />
+    <package name="ida.plugin.hashdb.vm" />
+    <package name="ida.plugin.ifl.vm" />
+    <package name="ida.plugin.lighthouse.vm" />
+    <package name="ida.plugin.sigmaker.vm" />
+    <package name="idafree.vm" />
+    <package name="ilspy.vm" />
+    <package name="pebear.vm" />
+    <package name="stracciatella.vm" />
+    <package name="nanodump.vm" />
+    <package name="confuserex.vm" />
+    <package name="outflank-c2-tool-collection.vm" />
+    <package name="truestedsec-remote-ops-bof.vm" />
+    <package name="unhook-bof.vm" />
+    <package name="dotnettojscript.vm" />
+    <package name="badassmacros.vm" />
+    <package name="c3.vm" />
+    <package name="exiftool.vm" />
+    <package name="hxd.vm" />
+    <package name="syswhispers2.vm" />
+    <package name="upx.vm" />
+    <package name="windbg.vm" />
+    <package name="pesieve.vm" />
+    <package name="shellcode_launcher.vm" />
+    <package name="dnspyex.vm" />
+    <package name="fakenet-ng.vm" />
+    <package name="nasm.vm" />
+    <package name="safetykatz.vm" />
+    <package name="sharpexec.vm" />
+    <package name="syswhispers3.vm" />
+    <package name="wmimplant.vm" />
+    <package name="merlin.vm" />
+    <package name="010editor.vm" />
+    <package name="apimonitor.vm" />
+    <package name="bindiff.vm" />
+    <package name="blobrunner.vm" />
+    <package name="blobrunner64.vm" />
+    <package name="bstrings.vm" />
+    <package name="bytecodeviewer.vm" />
+    <package name="chainsaw.vm" />
+    <package name="codetrack.vm" />
+    <package name="cutter.vm" />
+    <package name="dcode.vm" />
+    <package name="de4dot-cex.vm" />
+    <package name="dependencywalker.vm" />
+    <package name="didier-stevens-beta.vm" />
+    <package name="didier-stevens-suite.vm" />
+    <package name="die.vm" />
+    <package name="dll-to-exe.vm" />
+    <package name="exeinfope.vm" />
+    <package name="event-log-explorer.vm" />
+    <package name="extreme_dumper.vm" />
+    <package name="floss.vm" />
+    <package name="ghidra.vm" />
+    <package name="goresym.vm" />
+    <package name="hayabusa.vm" />
+    <package name="hollowshunter.vm" />
+    <package name="idr.vm" />
+    <package name="imhex.vm" />
+    <package name="js-deobfuscator.vm" />
+    <package name="jlecmd.vm" />
+    <package name="kernel-outlook-pst-viewer.vm" />
+    <package name="peid.vm" />
+    <package name="pdbresym.vm" />
+    <package name="pdbs.pdbresym.vm" />
+    <package name="pdfstreamdumper.vm" />
+    <package name="pe_unmapper.vm" />
+    <package name="peanatomist.vm" />
+    <package name="pestudio.vm" />
+    <package name="regshot.vm" />
+    <package name="reg_export.vm" />
+    <package name="rpcview.vm" />
+    <package name="testdisk.vm" />
+  </packages>
+</config>
