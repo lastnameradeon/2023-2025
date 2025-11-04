@@ -9,3 +9,12 @@
 #2024下半期学习总结  https://github.com/lastnameradeon/2023-2026/blob/main/X_2024%E4%B8%8B%E5%8D%8A%E6%9C%9F%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93.md
 
 
+#2025全年学习总结  
+
+
+#2026全年学习总结    
+
+
+#2027全年学习总结  
+
+
