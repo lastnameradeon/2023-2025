@@ -12,9 +12,9 @@
 #2025全年学习总结  https://github.com/lastnameradeon/2023-2026/blob/main/X_2025%E5%85%A8%E6%9C%9F%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93.md
 
 
-#2026全年学习总结  https://github.com/lastnameradeon/2023-2026/blob/main/X_2026%E5%85%A8%E6%9C%9F%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93.md  
+#2026全年学习总结(待更新)  https://github.com/lastnameradeon/2023-2026/blob/main/X_2026%E5%85%A8%E6%9C%9F%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93.md  
 
 
-#2027全年学习总结  
+#2027全年学习总结(待更新)
 
 
